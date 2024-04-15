@@ -1,0 +1,12 @@
+[Unit]
+Description=hebe
+Requires=network.target
+
+[Service]
+Type=forking
+ExecStart=/App/hebe/service.sh start
+ExecStop=/App/hebe/service.sh stop
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

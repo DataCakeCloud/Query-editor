@@ -1,0 +1,235 @@
+## 指定默认激活的环境配置
+server:
+  port: 8088
+  connection-timeout: 1800000
+  servlet:
+    session:
+      timeout: 7200s
+  compression:
+    enabled: true
+    min-response-size: 500
+
+# 调试 tomcat:
+#    max-threads: 1
+swagger:
+  enable: false
+
+spring:
+  servlet:
+    multipart:
+      max-request-size: 1024MB
+      max-file-size: 500MB
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  messages:
+    encoding: UTF-8
+  application:
+    name: '@name@'
+  cache:
+    cache-names: metadata, group, chart, bi
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=24h
+
+  ##datasource
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialization-mode: always
+    schema: classpath*:schema.sql
+    data: classpath*:data.sql
+    druid:
+      # 数据源其他配置
+      initialSize: 0
+      minIdle: 1
+      maxActive: 100
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 合并多个数据源监控信息
+      useGlobalDataSourceStat: true
+      # statu 监控统计，'wall'用于防御sql注入
+      filters: stat,wall,slf4j
+      stat-view-servlet:
+        url-pattern: /inf-druid/*
+        login-username: inf-db
+        login-password: inf2018
+      filter:
+        stat:
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+        slf4j:
+          enabled: true
+          statement-create-after-log-enabled: true
+          statement-close-after-log-enabled: true
+          result-set-open-after-log-enabled: true
+          result-set-close-after-log-enabled: true
+    url: jdbc:mysql://127.0.0.1:3306/query_editor?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+    username: admin
+    password: admin
+    database: query_editor
+
+management:
+  endpoints:
+    # Actuator HTTP 配置项，对应 WebEndpointProperties 配置类
+    web:
+      exposure:
+        include: '*'
+
+  server:
+    port: 10123
+
+  metrics:
+    tags: # 通用标签
+      application: ${spring.application.name}
+
+version: '@version@'
+session:
+  key:
+    user: user
+
+## mapper配置
+mapper:
+  not-empty: false
+  identity: MYSQL
+
+genie:
+  client:
+    url: "https://genie.ushareit.org"
+
+## 数据条数
+count:
+  display:
+    1000
+  download:
+    10000000
+
+## 取消任务时sleep
+cancel:
+  sleep:
+    2000
+  count:
+    3
+
+## 获取spark日志url时sleep
+spark:
+  sleep:
+    2000
+  count:
+    3
+  cancelCount:
+    3
+
+olap:
+  url:
+    aws_ue1: "jdbc:presto://127.0.0.1:80/hive/default"
+    aws_sg: "jdbc:presto://127.0.0.1:80/hive/default"
+    huawei_sg: "jdbc:presto://127.0.0.1:80/hive/default"
+  sslProperty:
+    aws_ue1: "true"
+    aws_sg: "true"
+    huawei_sg: "true"
+
+olapDB:
+  url: jdbc:mysql://127.0.0.1:3306/olap?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+  username: admin
+  password: admin
+
+cloud:
+  aws:
+    us-east-1:
+      ue1_aws_access_keys_id: ""
+      ue1_aws_secret_access_key: ""
+  huawei:
+    obs_access_key_id: ""
+    obs_secret_access_key: ""
+    obs_bucket: ""
+    obs_endPoint: ""
+  ks:
+    ks_access_key_id: "xx"
+    ks_secret_access_key: "yy"
+    ks_endpoint: "ks3-cn-beijing.ksyuncs.com"
+
+upload_local_tmp: "/tmp/"
+admin_tenant: "bdp"
+
+cluster-manager:
+  url: "http://api-gateway"
+  s3_role_url: "xx"
+
+api:
+  basePath: "http://api-gateway/qe/dataService/api/data?"
+
+databend:
+  engineKey: "mysql_databend-test"
+
+de:
+  gateway: "http://api-gateway/api-gateway/ds_task"
+
+qe:
+  qe_url: "http://api-gateway/api-gateway/qe"
+
+bi:
+  url:
+    aws_ue1: "jdbc:mysql://127.0.0.1:3306/?useUnicode=true&characterEncoding=utf8&useSSL=false"
+    aws_sg: "jdbc:mysql://127.0.0.1:3306/?useUnicode=true&characterEncoding=utf8&useSSL=false"
+    huawei_sg: "jdbc:mysql://127.0.0.1:3306/?useUnicode=true&characterEncoding=utf8&useSSL=false"
+  username:
+    aws_ue1: "query_bi"
+    aws_sg: "query_bi"
+    huawei_sg: "query_bi"
+  password:
+    aws_ue1: "admin"
+    aws_sg: "admin"
+    huawei_sg: "admin"
+
+lakecat:
+  url: "http://catalog-server/"
+
+k8s:
+  token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+  host_env: "KUBERNETES_SERVICE_HOST"
+  port_env: "KUBERNETES_SERVICE_PORT"
+  namespace: "datacake"
+  endpoint: "query-editor"
+
+share_email:
+  host: "smtp.qiye.aliyun.com"
+  protocol: "smtp"
+  username: "admin"
+  email: "admin@ushareit.com"
+  password: "admin"
+
+aiservice:
+  smart_engine: "http://127.0.0.1:8082/engine"
+  timeest : "http://127.0.0.1:8082/timeest"
+  ai_chat : "http://127.0.0.1:8082/text2SQL"
+
+gateway:
+  url: "jdbc:hive2://gateway:10009/"
+  spark_cluster_tags:
+    aws_ue1: "type:yarn,region:us-east-1,sla:normal,rbac.cluster:bdp-prod,provider:aws"
+    aws_us-east-1: "type:yarn,region:us-east-1,sla:normal,rbac.cluster:bdp-prod,provider:aws"
+    aws_sg: "type:yarn,region:ap-southeast-1,sla:normal,rbac.cluster:bdp-prod,provider:aws"
+    huawei_sg: "type:yarn,region:ap-southeast-2,sla:normal,rbac.cluster:bdp-prod,provider:huawei"
+  trino_cluster_tags:
+    aws_ue1: "region:us-east-1,provider:aws"
+    aws_us-east-1: "region:us-east-1,provider:aws"
+    aws_sg: "region:ap-southeast-1,provider:aws"
+    huawei_sg: "region:ap-southeast-2,provider:huawei"
+  hive_cluster_tags:
+    aws_ue1: "provider:aws,region:us-east-1"
+    aws_us-east-1: "provider:aws,region:us-east-1"
+    aws_sg: "provider:aws,region:us-east-1"
+    huawei_sg: "provider:aws,region:us-east-1"
+  logDir: "/Users/data/logs"
+
+logging:
+  level:
+    com.ushareit.query.mapper.*: debug
